@@ -26,20 +26,19 @@ var exam3 = [
 // You'll have to wait for you page to load to assign events to the elements created in your index.html file
 $(function() {
   // Select SVG
-
+  var svg = d3.select("#my-svg");
   // Reusable draw function
+  var draw = function(dataSet) {
 
+  
     // Bind data to selection of rects in your svg
-
-
-    // Enter rect elements
-
+    var rects = svg.selectAll("rect").data(dataSet, function(d){return d.id});
 
     // Entering and updating elements rects
-
+    rects.enter().append("rect").merge(rects).text(function(d){return d.student}).style("width", function(){return d.grade})
 
     // Transition a remove for exiting elements
-
+    rects.exit().transition("1000").style("opacity", 0).exit()
 
     // Perform the same data-binding for text
 
@@ -49,7 +48,7 @@ $(function() {
 
     // Entering and updating elements rects
 
-
+  }
     // Transition a remove for exiting elements
     $('button').on('click', function() {
       var btn = $(this).attr("id");
