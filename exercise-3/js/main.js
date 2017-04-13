@@ -26,30 +26,49 @@ var exam3 = [
 // You'll have to wait for you page to load to assign events to the elements created in your index.html file
 $(function() {
   // Select SVG
-  var svg = d3.select("#my-svg");
+  var mySVG = d3.select("#my-svg").attr("height", 200);
+
   // Reusable draw function
-  var draw = function(dataSet) {
+  var draw = function(myData) {
 
   
     // Bind data to selection of rects in your svg
-    var rects = svg.selectAll("rect").data(dataSet, function(d){return d.id});
+    var rects = mySVG.selectAll("rect").data(myData, function(d){return d.id});
+
+    // Enter rect elements
+    rects.enter().append("rect")
+    .attr("width", 0)
+    .attr("height", 30)
+    .attr("x", 20)
+    .attr("y", function(d){return d.id * 40})
+    .merge(rects)
+    .transition()
+    .duration(500)
+    .attr("width", function(d){return d.grade})
 
     // Entering and updating elements rects
-    rects.enter().append("rect").merge(rects).text(function(d){return d.student}).style("width", function(){return d.grade})
+
 
     // Transition a remove for exiting elements
-    rects.exit().transition("1000").style("opacity", 0).exit()
+    rects.exit().transition().duration(500).attr("width", 0).remove()
 
     // Perform the same data-binding for text
-
+    var texts = mySVG.selectAll("text").data(myData, function(d){return d.id})
 
     // enter elements
-
-
+    texts.enter().append("text").merge(texts)
+    .attr("y", function(d){return d.id * 40 + 17})
+    .attr("x", 23)
+    .attr("width", function(d){return d.grade})
+    .text(function(d){return d.student})
+    .style("fill", "#FFF")
     // Entering and updating elements rects
 
-  }
+  
     // Transition a remove for exiting elements
+    texts.exit().transition().duration(500).attr("width", 0).remove()
+  };
+
     $('button').on('click', function() {
       var btn = $(this).attr("id");
       switch(btn){
@@ -66,7 +85,4 @@ $(function() {
           break;
       };
     })
-
-
-
 });
